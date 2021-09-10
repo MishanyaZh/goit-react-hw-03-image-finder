@@ -1,9 +1,33 @@
-// const ImageGalleryItem = () => {
+import s from '../ImageGallery/ImageGallery.module.css';
 
-//     <li className="ImageGalleryItem">
-//         <span> img</span>
-//         <img src="" alt="" className="ImageGalleryItem-image" />
-//     </li>
-// }
+const ImageGalleryItem = images => {
+  // console.log(images.props);
+  // const { id, webImg } = images;
 
-// export default ImageGalleryItem;
+  const imgArr = images.props;
+  console.log(imgArr);
+
+  return (
+    // <span>ooo</span>
+    <ul className={s.imageGallery}>
+      {imgArr.map(img => (
+        <li key={img.id} className="ImageGalleryItem">
+          <img src={img.webImg} alt="" className="ImageGalleryItem-image" />
+        </li>
+      ))}
+    </ul>
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // treba tak
+    //   {imgArr.map(img => (
+
+    //         <li key={img.id} className="ImageGalleryItem">
+    //             <img src={img.webImg} alt="" className="ImageGalleryItem-image" />
+    //         </li>
+
+    //     ))}
+    //   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  );
+};
+
+export default ImageGalleryItem;

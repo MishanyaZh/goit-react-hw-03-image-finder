@@ -15,11 +15,6 @@ const Searchbar = ({ onSubmit }) => (
       </button>
 
       <input
-        onSubmit={e => {
-          e.preventDefault();
-          // onSubmit(e.target.value);
-          console.log(e.target.value);
-        }}
         name="imgValue"
         className={s.searchFormInput}
         type="text"
