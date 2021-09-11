@@ -5,8 +5,10 @@ const Searchbar = ({ onSubmit }) => (
     <form
       onSubmit={e => {
         e.preventDefault();
-        onSubmit(e.target.elements.imgValue.value);
-        // console.log(e.target.elements.imgValue.value);
+        const value = e.target.elements.imgValue.value;
+        onSubmit(value);
+
+        e.target.elements.imgValue.value = '';
       }}
       className={s.searchForm}
     >

@@ -1,14 +1,14 @@
 import s from '../Button/Button.module.css';
 
-const Button = ({ onClick }) => {
+const Button = ({ onClickLoadMore }) => {
   return (
     <button
       onClick={e => {
         e.preventDefault();
-        console.log('klick');
+        onClickLoadMore();
       }}
       className={s.button}
-      type="submit"
+      type="button"
     >
       Load more
     </button>
