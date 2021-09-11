@@ -6,7 +6,7 @@ const Searchbar = ({ onSubmit }) => (
       onSubmit={e => {
         e.preventDefault();
         onSubmit(e.target.elements.imgValue.value);
-        console.log(e.target.elements.imgValue.value);
+        // console.log(e.target.elements.imgValue.value);
       }}
       className={s.searchForm}
     >

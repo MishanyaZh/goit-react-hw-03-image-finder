@@ -1,32 +1,12 @@
-import s from '../ImageGallery/ImageGallery.module.css';
+import s from '../ImageGalleryItem/ImageGalleryItem.module.css';
 
-const ImageGalleryItem = images => {
-  // console.log(images.props);
-  // const { id, webImg } = images;
-
-  const imgArr = images.props;
-  console.log(imgArr);
+const ImageGalleryItem = imagProp => {
+  const { id, webImg } = imagProp;
 
   return (
-    // <span>ooo</span>
-    <ul className={s.imageGallery}>
-      {imgArr.map(img => (
-        <li key={img.id} className="ImageGalleryItem">
-          <img src={img.webImg} alt="" className="ImageGalleryItem-image" />
-        </li>
-      ))}
-    </ul>
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // treba tak
-    //   {imgArr.map(img => (
-
-    //         <li key={img.id} className="ImageGalleryItem">
-    //             <img src={img.webImg} alt="" className="ImageGalleryItem-image" />
-    //         </li>
-
-    //     ))}
-    //   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    <li className={s.imageGalleryItem}>
+      <img src={webImg} alt={id} className={s.imageGalleryItemImage} />
+    </li>
   );
 };
 
