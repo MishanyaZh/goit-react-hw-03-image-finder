@@ -23,30 +23,28 @@ class App extends Component {
   };
 
   componentWillUnmount() {
-    // console.log('modal componentWillUnmount');
+    console.log('modal componentWillUnmount');
 
     window.removeEventListener('keydown', this.onCloseModal);
   }
 
   componentDidMount() {
-    // console.log('modal componentDidMount');
+    console.log('modal componentDidMount');
 
     window.addEventListener('keydown', this.onCloseModal);
   }
 
   onCloseModal = e => {
     if (e.code === 'Escape') {
-      this.setState({ selectImage: null });
-      // console.log('push escape');
-      // this.props.onEscape();
+      // this.setState({ selectImage: null });
+      console.log('push escape');
+      this.onEscape();
     }
   };
 
-  // onEscape = () => {
-  //   this.setState(({ selectImage }) => ({
-  //     selectImage: !selectImage,
-  //   }));
-  // }
+  onEscape = () => {
+    this.setState({ selectImage: null });
+  };
 
   handleSelectImage = imgUrl => {
     this.setState({ selectImage: imgUrl });
@@ -132,10 +130,7 @@ class App extends Component {
         />
 
         {this.state.selectImage && (
-          <Modal
-            image={this.state.selectImage}
-            // onEscape={this.onEscape}
-          />
+          <Modal image={this.state.selectImage} onEscape={this.onEscape} />
         )}
 
         {(this.state.reqStatus === 'resolved') & !this.state.loader && (
