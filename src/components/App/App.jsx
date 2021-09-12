@@ -10,7 +10,6 @@ import Searchbar from '../Searchbar/Searchbar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Button from '../Button/Button';
 import Modal from '../Modal/Modal';
-// import * as basicLightbox from 'basiclightbox'
 
 class App extends Component {
   state = {
@@ -20,15 +19,37 @@ class App extends Component {
     // idle, pending, resolved, rejected
     page: 1,
     loader: false,
-    // modal: false,
     selectImage: null,
   };
 
+  componentWillUnmount() {
+    // console.log('modal componentWillUnmount');
+
+    window.removeEventListener('keydown', this.onCloseModal);
+  }
+
+  componentDidMount() {
+    // console.log('modal componentDidMount');
+
+    window.addEventListener('keydown', this.onCloseModal);
+  }
+
+  onCloseModal = e => {
+    if (e.code === 'Escape') {
+      this.setState({ selectImage: null });
+      // console.log('push escape');
+      // this.props.onEscape();
+    }
+  };
+
+  // onEscape = () => {
+  //   this.setState(({ selectImage }) => ({
+  //     selectImage: !selectImage,
+  //   }));
+  // }
+
   handleSelectImage = imgUrl => {
     this.setState({ selectImage: imgUrl });
-    console.log(imgUrl);
-    // console.log("imageClick");
-    // console.log(this.state.selectImage);
   };
 
   handleFormSubmit = imgValue => {
@@ -68,6 +89,8 @@ class App extends Component {
         if (images.length === 0) {
           this.setState({
             reqStatus: 'rejected',
+            images: [],
+            page: 1,
           });
           toast.error('your images not faind.');
           return;
@@ -77,7 +100,6 @@ class App extends Component {
           this.setState({
             images: [],
             page: 1,
-            // loader: true,
           });
         }
 
@@ -99,13 +121,6 @@ class App extends Component {
     }
   }
 
-  // imageClick = e => {
-  //   console.log("imageClick");
-  //   this.setState({
-  //     modal: true,
-  //   });
-  // }
-
   render() {
     return (
       <div className={s.app}>
@@ -113,14 +128,13 @@ class App extends Component {
 
         <ImageGallery
           images={this.state.images}
-          // onImageClick={this.imageClick}
-          onSelect={this.handleSelectImage}
+          handleSelectImage={this.handleSelectImage}
         />
 
         {this.state.selectImage && (
           <Modal
-            // images={this.state.images}
             image={this.state.selectImage}
+            // onEscape={this.onEscape}
           />
         )}
 
