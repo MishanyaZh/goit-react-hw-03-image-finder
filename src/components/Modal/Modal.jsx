@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 import s from '../Modal/Modal.module.css';
 
 const Modal = imgProp => {
-  const { image, onEscape } = imgProp;
+  const { image, onCloseModal } = imgProp;
 
   return (
     <div
       onClick={e => {
-        onEscape();
+        onCloseModal();
       }}
       className={s.overlay}
     >
@@ -29,5 +29,5 @@ export default Modal;
 
 Modal.propTypes = {
   imgProp: PropTypes.string,
-  onEscape: PropTypes.func,
+  onCloseModal: PropTypes.func,
 };

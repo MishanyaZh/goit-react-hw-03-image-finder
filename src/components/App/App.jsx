@@ -22,49 +22,6 @@ class App extends Component {
     selectImage: null,
   };
 
-  componentWillUnmount() {
-    console.log('modal componentWillUnmount');
-
-    window.removeEventListener('keydown', this.onCloseModal);
-  }
-
-  componentDidMount() {
-    console.log('modal componentDidMount');
-
-    window.addEventListener('keydown', this.onCloseModal);
-  }
-
-  onCloseModal = e => {
-    if (e.code === 'Escape') {
-      // this.setState({ selectImage: null });
-      console.log('push escape');
-      this.onEscape();
-    }
-  };
-
-  onEscape = () => {
-    this.setState({ selectImage: null });
-  };
-
-  handleSelectImage = imgUrl => {
-    this.setState({ selectImage: imgUrl });
-  };
-
-  handleFormSubmit = imgValue => {
-    this.setState({
-      imgValue,
-      page: 1,
-      loader: true,
-    });
-  };
-
-  loadMoreClick = e => {
-    this.setState({
-      page: this.state.page + 1,
-      loader: true,
-    });
-  };
-
   async componentDidUpdate(_, prevState) {
     if (
       prevState.imgValue !== this.state.imgValue ||
@@ -119,6 +76,44 @@ class App extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onEscape);
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.onEscape);
+  }
+
+  onEscape = e => {
+    if (e.code === 'Escape') {
+      // this.setState({ selectImage: null });
+      this.onCloseModal();
+    }
+  };
+
+  onCloseModal = () => {
+    this.setState({ selectImage: null });
+  };
+
+  handleSelectImage = imgUrl => {
+    this.setState({ selectImage: imgUrl });
+  };
+
+  handleFormSubmit = imgValue => {
+    this.setState({
+      imgValue,
+      page: 1,
+      loader: true,
+    });
+  };
+
+  loadMoreClick = e => {
+    this.setState({
+      page: this.state.page + 1,
+      loader: true,
+    });
+  };
+
   render() {
     return (
       <div className={s.app}>
@@ -130,7 +125,10 @@ class App extends Component {
         />
 
         {this.state.selectImage && (
-          <Modal image={this.state.selectImage} onEscape={this.onEscape} />
+          <Modal
+            image={this.state.selectImage}
+            onCloseModal={this.onCloseModal}
+          />
         )}
 
         {(this.state.reqStatus === 'resolved') & !this.state.loader && (
