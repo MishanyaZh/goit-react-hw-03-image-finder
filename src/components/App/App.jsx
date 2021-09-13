@@ -23,23 +23,25 @@ class App extends Component {
   };
 
   async componentDidUpdate(_, prevState) {
-    if (
-      prevState.imgValue !== this.state.imgValue ||
-      prevState.page !== this.state.page
-    ) {
+    const { imgValue, page } = this.state;
+    if (prevState.imgValue !== imgValue || prevState.page !== page) {
       this.setState({ loader: true });
 
-      if (this.state.imgValue.trim() === '') {
+      if (imgValue.trim() === '') {
         this.setState({
           reqStatus: 'pending',
+          loader: false,
         });
         toast.error('Pleas write something');
         return;
       }
 
       try {
-        const images = await fetchImages(this.state.imgValue, this.state.page);
-        this.setState({ loader: false });
+        const images = await fetchImages(imgValue, page);
+        this.setState({
+          loader: false,
+          reqStatus: 'idle',
+        });
 
         if (images.length === 0) {
           this.setState({
@@ -51,7 +53,7 @@ class App extends Component {
           return;
         }
 
-        if (prevState.imgValue !== this.state.imgValue) {
+        if (prevState.imgValue !== imgValue) {
           this.setState({
             images: [],
             page: 1,
@@ -62,11 +64,13 @@ class App extends Component {
           return {
             images: [...prevState.images, ...images],
             reqStatus: 'resolved',
-            loader: false,
+            // loader: false,
           };
         });
 
-        toast(`its your, ${this.state.imgValue}s!`, {
+        this.scrollTo();
+
+        toast(`its your, ${imgValue}s!`, {
           icon: '👏',
         });
       } catch (error) {
@@ -114,31 +118,34 @@ class App extends Component {
     });
   };
 
+  scrollTo = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
   render() {
+    const { images, reqStatus, loader, selectImage } = this.state;
+
     return (
       <div className={s.app}>
         <Searchbar onSubmit={this.handleFormSubmit} />
-
         <ImageGallery
-          images={this.state.images}
+          images={images}
           handleSelectImage={this.handleSelectImage}
         />
 
-        {this.state.selectImage && (
-          <Modal
-            image={this.state.selectImage}
-            onCloseModal={this.onCloseModal}
-          />
+        {selectImage && (
+          <Modal image={selectImage} onCloseModal={this.onCloseModal} />
         )}
 
-        {(this.state.reqStatus === 'resolved') & !this.state.loader && (
-          <Button onClickLoadMore={this.loadMoreClick} />
-        )}
+        <LoaderContainer>
+          {reqStatus === 'resolved' && !loader && (
+            <Button onClickLoadMore={this.loadMoreClick} />
+          )}
 
-        <Toaster position="top-right" reverseOrder={false} />
-
-        {this.state.loader !== false && (
-          <LoaderContainer>
+          {loader !== false && (
             <Loader
               type="Puff"
               color="#00BFFF"
@@ -146,8 +153,9 @@ class App extends Component {
               width={100}
               timeout={3000} //3 secs
             />
-          </LoaderContainer>
-        )}
+          )}
+        </LoaderContainer>
+        <Toaster position="top-right" reverseOrder={false} />
       </div>
     );
   }
