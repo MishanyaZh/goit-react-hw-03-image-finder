@@ -30,7 +30,6 @@ class App extends Component {
       if (imgValue.trim() === '') {
         this.setState({
           reqStatus: 'pending',
-          loader: false,
         });
         toast.error('Pleas write something');
         return;
@@ -39,17 +38,16 @@ class App extends Component {
       try {
         const images = await fetchImages(imgValue, page);
         this.setState({
-          loader: false,
           reqStatus: 'idle',
         });
 
-        if (images.length === 0) {
+        if (!images.length) {
           this.setState({
             reqStatus: 'rejected',
             images: [],
             page: 1,
           });
-          toast.error('your images not faind.');
+          toast.error('your images not find.');
           return;
         }
 
@@ -76,24 +74,11 @@ class App extends Component {
       } catch (error) {
         this.setState({ reqStatus: 'rejected' });
         toast.error("This didn't work.");
+      } finally {
+        this.setState({ loader: false });
       }
     }
   }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onEscape);
-  }
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.onEscape);
-  }
-
-  onEscape = e => {
-    if (e.code === 'Escape') {
-      // this.setState({ selectImage: null });
-      this.onCloseModal();
-    }
-  };
 
   onCloseModal = () => {
     this.setState({ selectImage: null });
@@ -114,7 +99,6 @@ class App extends Component {
   loadMoreClick = e => {
     this.setState({
       page: this.state.page + 1,
-      loader: true,
     });
   };
 
